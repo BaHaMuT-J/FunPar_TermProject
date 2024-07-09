@@ -45,5 +45,43 @@ object BST {
 
       Future.sequence(futures).map(_ => ())
     }
+
+    //Not sure whether this is enough parallelization or not. Will edit soon
+    
+    def combineTrees[T](tree1: BST[T], tree2: BST[T])(implicit ord: Ordering[T]): Future[BST[T]] = {
+      def traverse(tree: BST[T]): Future[List[T]] = Future {
+        def traverseHelper(node: BST[T]): List[T] = node match {
+          case Empty => List()
+          case Node(k, l, r) =>
+            traverseHelper(l) ::: List(k) ::: traverseHelper(r)
+        }
+        traverseHelper(tree)
+      }
+
+      val futureList1 = traverse(tree1)
+      val futureList2 = traverse(tree2)
+
+      for {
+        list1 <- futureList1
+        list2 <- futureList2
+        mergedList = (list1.par ++ list2.par).toList.sorted(ord)
+      } yield sortedListToBST(mergedList)
+    }
+  }
+  def traverseHelper[T](node: BST[T]): List[T] = node match {
+  case Empty => List()
+  case Node(k, l, r) =>
+    traverseHelper(l) ::: List(k) ::: traverseHelper(r)
+  }
+
+  def combineTrees[T](tree1: BST[T], tree2: BST[T])(implicit ord: Ordering[T]): Future[BST[T]] = {
+    val list_1 = Future(traverseHelper(tree1))
+    val list_2 = Future(traverseHelper(tree2))
+
+    for {
+      list1 <- list_1
+      list2 <- list_2
+      merge_tgt = (list1.par ++ list2.par).toList.sorted(ord)
+    } yield sortedListToBST(merge_tgt)
   }
 }

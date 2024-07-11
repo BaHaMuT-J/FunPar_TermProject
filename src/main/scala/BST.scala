@@ -101,6 +101,48 @@ object BST {
       result
     }
 
+    def levelSeq(depth: Int): Vector[T] = {
+      if depth < 1 then return Vector()
+
+      @tailrec
+      def levelHelper(m: mutable.Queue[BST[T]], d: Int): Vector[T] = {
+        val newQueue = new mutable.Queue[BST[T]]()
+        var result = Vector[T]()
+
+        for (node <- m) {
+          node match {
+            case Empty =>
+            case Node(k, l, r) =>
+              if d == depth then result = result.prepended(k) else newQueue.enqueue(l, r)
+          }
+        }
+
+        if d == depth then result.reverse
+        else if newQueue.nonEmpty then levelHelper(newQueue, d + 1)
+        else Vector()
+      }
+
+      levelHelper(new mutable.Queue[BST[T]]().enqueue(root), 1)
+    }
+
+    def findLevelSeq(key: T): Option[Int] = {
+      @tailrec
+      def findLevelHelper(m: mutable.Queue[BST[T]], d: Int): Option[Int] = {
+        val newQueue = new mutable.Queue[BST[T]]()
+
+        for (node <- m) {
+          node match {
+            case Empty =>
+            case Node(k, l, r) =>
+              if k.equals(key) then return Some(d) else newQueue.enqueue(l, r)
+          }
+        }
+
+        if newQueue.nonEmpty then findLevelHelper(newQueue, d + 1) else None
+      }
+
+      findLevelHelper(new mutable.Queue[BST[T]]().enqueue(root), 1)
+    }
 
     // Parallel Programming
 

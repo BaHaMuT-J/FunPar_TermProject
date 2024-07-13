@@ -19,13 +19,13 @@ object BST {
     def this(e: T)(implicit ord: Ordering[T]) = this(Node(e, Empty, Empty))
 
     override def toString: String = {
-      def stringHelper(node: BST[T]): String = node match {
-        case Empty => ""
+      def stringHelper(node: BST[T], str: String): String = node match {
+        case Empty => str
         case Node(k, l, r) =>
-          stringHelper(l) + " " + k + " " + stringHelper(r)
+          stringHelper(r, stringHelper(l, str) + " " + k + " ")
       }
 
-      "[" + stringHelper(root) + "]"
+      "[" + stringHelper(root, "") + "]"
     }
 
     def getRoot: BST[T] = root
@@ -149,16 +149,13 @@ object BST {
     private def insertParHelper(node: BST[T], key: T): BST[T] = node match {
       case Empty => Node(key, Empty, Empty)
       case Node(k, l, r) =>
-        if (ord.lt(key, k)) {
-          Node(k, insertParHelper(l, key), r)
-        } else if (ord.gt(key, k)) {
-          Node(k, l, insertParHelper(r, key))
-        } else {
-          node
-        }
+        val cmp = ord.compare(key, k)
+        if (cmp < 0) Node(k, insertParHelper(l, key), r)
+        else if (cmp == 0) node
+        else Node(k, l, insertParHelper(r, key))
     }
 
-    def insertPar(keys: Seq[T]): Future[Unit] = {
+    def insertAllPar(keys: Seq[T]) = {
       val futures = keys.par.map { key =>
         Future {
           this.synchronized {
@@ -167,7 +164,7 @@ object BST {
         }
       }
 
-      Future.sequence(futures).map(_ => ())
+      Await.ready(Future.sequence(futures.toList), Duration.Inf)
     }
 
     def traverseHelper[T](node: BST[T]): List[T] = node match {
@@ -176,7 +173,7 @@ object BST {
         traverseHelper(l) ::: List(k) ::: traverseHelper(r)
     }
 
-    def sortedListToBST(sortedList: List[T]): BST[T] = {
+    def sortedListToBST(sortedList: List[T]): ParBST[T] = {
       def buildTree(lst: List[T]): BST[T] = lst match {
         case Nil => Empty
         case _ =>
@@ -184,18 +181,21 @@ object BST {
           val (left, right) = lst.splitAt(mid)
           Node(right.head, buildTree(left), buildTree(right.tail))
       }
-      buildTree(sortedList)
+
+      new ParBST[T](buildTree(sortedList))
     }
 
-    def combinePar(tree1: BST[T], tree2: BST[T])(implicit ord: Ordering[T]): Future[BST[T]] = {
-      val list_1 = Future(traverseHelper(tree1))
-      val list_2 = Future(traverseHelper(tree2))
+    def combinePar(tree: ParBST[T])(implicit ord: Ordering[T]): ParBST[T] = {
+      val list_1 = Future(traverseHelper(root))
+      val list_2 = Future(traverseHelper(tree.getRoot))
 
-      for {
+      val c = for {
         list1 <- list_1
         list2 <- list_2
-        merge_tgt = (list1.par ++ list2.par).toList.sorted(ord)
+        merge_tgt = (list1.par ++ list2.par).toSet.toList.sorted(ord)
       } yield sortedListToBST(merge_tgt)
+
+      Await.result(c, Duration.Inf)
     }
   }
 }

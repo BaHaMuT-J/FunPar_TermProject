@@ -3,7 +3,7 @@ import scala.collection.mutable
 import scala.concurrent.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.*
-//import scala.collection.parallel.CollectionConverters.* // Error: can't import
+import scala.collection.parallel.CollectionConverters.*
 
 object BST {
 
@@ -35,8 +35,8 @@ object BST {
         case Empty => Node(e, Empty, Empty)
         case Node(k, l, r) =>
           val cmp = ord.compare(e, k)
-          if cmp < 0 then Node(k, insertHelper(e, l), r)
-          else if cmp == 0 then rt
+          if (cmp < 0) Node(k, insertHelper(e, l), r)
+          else if (cmp == 0) rt
           else Node(k, l, insertHelper(e, r))
       }
 
@@ -44,9 +44,9 @@ object BST {
     }
 
     def +(e: T): ParBST[T] = {
-      val newRoot = ParBST[T](root)
-      newRoot.insertSeq(e)
-      newRoot
+      val newTree = new ParBST(root)
+      newTree.insertSeq(e)
+      newTree
     }
 
     def insertAllSeq(elements: Seq[T]): Unit = for (elem <- elements) {
@@ -54,9 +54,9 @@ object BST {
     }
 
     def ++(s: Seq[T]): ParBST[T] = {
-      val newRoot = ParBST[T](root)
-      newRoot.insertAllSeq(s)
-      newRoot
+      val newTree = new ParBST(root)
+      newTree.insertAllSeq(s)
+      newTree
     }
 
     def combineSeq(tree: ParBST[T]): ParBST[T] = {
@@ -93,8 +93,8 @@ object BST {
           }
         }
 
-        if tempVec.nonEmpty then result = result.prepended(Map(d -> tempVec.reverse))
-        if newQueue.nonEmpty then levelMap(newQueue, d + 1)
+        if (tempVec.nonEmpty) result = result.prepended(Map(d -> tempVec.reverse))
+        if (newQueue.nonEmpty) levelMap(newQueue, d + 1)
       }
 
       levelMap(new mutable.Queue[BST[T]]().enqueue(root), 1)
@@ -102,7 +102,7 @@ object BST {
     }
 
     def levelSeq(depth: Int): Vector[T] = {
-      if depth < 1 then return Vector()
+      if (depth < 1) return Vector()
 
       @tailrec
       def levelHelper(m: mutable.Queue[BST[T]], d: Int): Vector[T] = {
@@ -113,12 +113,12 @@ object BST {
           node match {
             case Empty =>
             case Node(k, l, r) =>
-              if d == depth then result = result.prepended(k) else newQueue.enqueue(l, r)
+              if (d == depth) result = result.prepended(k) else newQueue.enqueue(l, r)
           }
         }
 
-        if d == depth then result.reverse
-        else if newQueue.nonEmpty then levelHelper(newQueue, d + 1)
+        if (d == depth) result.reverse
+        else if (newQueue.nonEmpty) levelHelper(newQueue, d + 1)
         else Vector()
       }
 
@@ -134,11 +134,11 @@ object BST {
           node match {
             case Empty =>
             case Node(k, l, r) =>
-              if k.equals(key) then return Some(d) else newQueue.enqueue(l, r)
+              if (k.equals(key)) return Some(d) else newQueue.enqueue(l, r)
           }
         }
 
-        if newQueue.nonEmpty then findLevelHelper(newQueue, d + 1) else None
+        if (newQueue.nonEmpty) findLevelHelper(newQueue, d + 1) else None
       }
 
       findLevelHelper(new mutable.Queue[BST[T]]().enqueue(root), 1)
@@ -157,21 +157,18 @@ object BST {
           node
         }
     }
-    
-//    def insertPar(keys: Seq[T]): Future[Unit] = {
-//      // Error: value par is not a member of Seq[T]
-//      val futures = keys.par.map { key =>
-//        Future {
-//          this.synchronized {
-//            root = insertParHelper(root, key)
-//          }
-//        }
-//      }.toList
-//
-//      // Error: Cannot construct a collection of type To with elements of type A 
-//      // based on a collection of type IterableOnce[scala.concurrent.Future[A]]
-//      Future.sequence(futures).map(_ => ())
-//    }
+
+    def insertPar(keys: Seq[T]): Future[Unit] = {
+      val futures = keys.par.map { key =>
+        Future {
+          this.synchronized {
+            root = insertParHelper(root, key)
+          }
+        }
+      }
+
+      Future.sequence(futures).map(_ => ())
+    }
 
     def traverseHelper[T](node: BST[T]): List[T] = node match {
       case Empty => List()
@@ -179,18 +176,26 @@ object BST {
         traverseHelper(l) ::: List(k) ::: traverseHelper(r)
     }
 
-//    //Not sure whether this is enough parallelization or not. Will edit soon
-//    def combinePar[T](tree1: BST[T], tree2: BST[T])(implicit ord: Ordering[T]): Future[BST[T]] = {
-//      val list_1 = Future(traverseHelper(tree1))
-//      val list_2 = Future(traverseHelper(tree2))
-//
-//      for {
-//        list1 <- list_1
-//        list2 <- list_2
-//        
-//        // Error: value par is not a member of List[T]
-//        merge_tgt = (list1.par ++ list2.par).toList.sorted(ord)
-//      } yield sortedListToBST(merge_tgt) // Error: Not found: sortedListToBST
-//    }
+    def sortedListToBST(sortedList: List[T]): BST[T] = {
+      def buildTree(lst: List[T]): BST[T] = lst match {
+        case Nil => Empty
+        case _ =>
+          val mid = lst.length / 2
+          val (left, right) = lst.splitAt(mid)
+          Node(right.head, buildTree(left), buildTree(right.tail))
+      }
+      buildTree(sortedList)
+    }
+
+    def combinePar(tree1: BST[T], tree2: BST[T])(implicit ord: Ordering[T]): Future[BST[T]] = {
+      val list_1 = Future(traverseHelper(tree1))
+      val list_2 = Future(traverseHelper(tree2))
+
+      for {
+        list1 <- list_1
+        list2 <- list_2
+        merge_tgt = (list1.par ++ list2.par).toList.sorted(ord)
+      } yield sortedListToBST(merge_tgt)
+    }
   }
 }

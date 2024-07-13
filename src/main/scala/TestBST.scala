@@ -9,13 +9,18 @@ object TestBST extends App {
 //  t.insertAllPar({1 to 10000}.toList)
 //  println(t)
 
-  val a = new BST.ParBST[Int](10) ++ Vector(2,1,3,12,11,13)
-  val b = new BST.ParBST[Int](10) ++ Vector(5,4,6,15,14,16)
-  println(a)
+  val a = new BST.ParBST[Int](10)
+  a.insertAllPar({1 to 50000}.toList)
+  val b = new BST.ParBST[Int](10)
+//  b.insertAllPar({50001 to 100000}.toList)
+  //println(a)
+
+  val d = a.findLevelSeq(50000)
+  println(a.levelTraverseSeq)
+  println(d)
+  println(a.levelSeq(d.getOrElse(1)))
+
   println(b)
-  val c = a.combinePar(b)
-  println(a)
-  println(b)
-  println(c)
-  println(a.combineSeq(b))
+  //println(a.combineSeq(b))
+  //println(a.combinePar(b))
 }

@@ -9,14 +9,15 @@ object BST {
 
   trait BST[+T]
 
-  case object Empty extends BST[Nothing]
+  private case object Empty extends BST[Nothing]
 
-  case class Node[T](key: T, left: BST[T], right: BST[T]) extends BST[T]
+  private case class Node[T](key: T, left: BST[T], right: BST[T]) extends BST[T]
 
-  class ParBST[T](initialRoot: BST[T])(implicit ord: Ordering[T]) extends BST[T] {
+  class ParBST[T](initialRoot: BST[T], initialSize: Int)(implicit ord: Ordering[T]) extends BST[T] {
     private var root: BST[T] = initialRoot
+    private var sizes: Int = initialSize
 
-    def this(e: T)(implicit ord: Ordering[T]) = this(Node(e, Empty, Empty))
+    def this(e: T)(implicit ord: Ordering[T]) = this(Node(e, Empty, Empty), 0)
 
     override def toString: String = {
       def stringHelper(node: BST[T], str: String): String = node match {
@@ -29,32 +30,40 @@ object BST {
     }
 
     def getRoot: BST[T] = root
+    def size: Int = sizes
 
+    // Error: Stack Overflow
+    // TODO: need to make this tail recursive
     def insertSeq(e: T): Unit = {
-      def insertHelper[K](e: K, rt: BST[K])(implicit ord: Ordering[K]): BST[K] = rt match {
-        case Empty => Node(e, Empty, Empty)
+      def insertHelper[K](key: K, node: BST[K])(implicit ord: Ordering[K]): BST[K] = node match {
+        case Empty => Node(key, Empty, Empty)
         case Node(k, l, r) =>
-          val cmp = ord.compare(e, k)
-          if (cmp < 0) Node(k, insertHelper(e, l), r)
-          else if (cmp == 0) rt
-          else Node(k, l, insertHelper(e, r))
+          if (ord.lt(key, k)) {
+            Node(k, insertHelper(key, l), r)
+          } else if (ord.gt(key, k)) {
+            Node(k, l, insertHelper(key, r))
+          } else {
+            node
+          }
       }
 
       root = insertHelper(e, root)
+      sizes += 1
     }
 
     def +(e: T): ParBST[T] = {
-      val newTree = new ParBST(root)
+      val newTree = new ParBST(root, sizes)
       newTree.insertSeq(e)
       newTree
     }
 
     def insertAllSeq(elements: Seq[T]): Unit = for (elem <- elements) {
       insertSeq(elem)
+      sizes += 1
     }
 
     def ++(s: Seq[T]): ParBST[T] = {
-      val newTree = new ParBST(root)
+      val newTree = new ParBST(root, sizes)
       newTree.insertAllSeq(s)
       newTree
     }
@@ -146,16 +155,21 @@ object BST {
 
     // Parallel Programming
 
+    // Error: Stack Overflow
+    // TODO: need to make this tail recursive
     private def insertParHelper(node: BST[T], key: T): BST[T] = node match {
       case Empty => Node(key, Empty, Empty)
       case Node(k, l, r) =>
-        val cmp = ord.compare(key, k)
-        if (cmp < 0) Node(k, insertParHelper(l, key), r)
-        else if (cmp == 0) node
-        else Node(k, l, insertParHelper(r, key))
+        if (ord.lt(key, k)) {
+          Node(k, insertParHelper(l, key), r)
+        } else if (ord.gt(key, k)) {
+          Node(k, l, insertParHelper(r, key))
+        } else {
+          node
+        }
     }
 
-    def insertAllPar(keys: Seq[T]) = {
+    def insertAllPar(keys: Seq[T]): Future[List[Unit]] = {
       val futures = keys.par.map { key =>
         Future {
           this.synchronized {
@@ -167,13 +181,19 @@ object BST {
       Await.ready(Future.sequence(futures.toList), Duration.Inf)
     }
 
-    def traverseHelper[T](node: BST[T]): List[T] = node match {
-      case Empty => List()
-      case Node(k, l, r) =>
-        traverseHelper(l) ::: List(k) ::: traverseHelper(r)
+    // Error: Stack Overflow
+    // TODO: need to make this tail recursive
+    private def traverseHelper(node: BST[T]): Set[T] = {
+      def traverseTailRec(node: BST[T], acc: Set[T]): Set[T] = node match {
+        case Empty => acc
+        case Node(k, l, r) =>
+          traverseTailRec(l, traverseTailRec(r, acc + k))
+      }
+
+      traverseTailRec(node, Set())
     }
 
-    def sortedListToBST(sortedList: List[T]): ParBST[T] = {
+    private def sortedListToBST(sortedList: List[T]): ParBST[T] = {
       def buildTree(lst: List[T]): BST[T] = lst match {
         case Nil => Empty
         case _ =>
@@ -182,7 +202,7 @@ object BST {
           Node(right.head, buildTree(left), buildTree(right.tail))
       }
 
-      new ParBST[T](buildTree(sortedList))
+      new ParBST[T](buildTree(sortedList), sortedList.size)
     }
 
     def combinePar(tree: ParBST[T])(implicit ord: Ordering[T]): ParBST[T] = {
@@ -192,7 +212,7 @@ object BST {
       val c = for {
         list1 <- list_1
         list2 <- list_2
-        merge_tgt = (list1.par ++ list2.par).toSet.toList.sorted(ord)
+        merge_tgt = (list1.par ++ list2.par).toList.sorted(ord)
       } yield sortedListToBST(merge_tgt)
 
       Await.result(c, Duration.Inf)

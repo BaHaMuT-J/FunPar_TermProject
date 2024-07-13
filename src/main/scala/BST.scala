@@ -32,19 +32,25 @@ object BST {
     def getRoot: BST[T] = root
     def size: Int = sizes
 
-    // Error: Stack Overflow
-    // TODO: need to make this tail recursive
+    // Refactored to be tail-recursive
     def insertSeq(e: T): Unit = {
-      def insertHelper[K](key: K, node: BST[K])(implicit ord: Ordering[K]): BST[K] = node match {
-        case Empty => Node(key, Empty, Empty)
-        case Node(k, l, r) =>
-          if (ord.lt(key, k)) {
-            Node(k, insertHelper(key, l), r)
-          } else if (ord.gt(key, k)) {
-            Node(k, l, insertHelper(key, r))
-          } else {
-            node
-          }
+      def insertHelper[K](key: K, node: BST[K])(implicit ord: Ordering[K]): BST[K] = {
+        @tailrec
+        def loop(curr: BST[K], path: List[BST[K]]): BST[K] = curr match {
+          case Empty =>
+            // Reconstruct the tree using the path
+            path.foldLeft(Node(key, Empty, Empty): BST[K]) {
+              case (subtree, Node(k, l, r)) =>
+                if (ord.lt(key, k)) Node(k, subtree, r)
+                else Node(k, l, subtree)
+            }
+          case n @ Node(k, l, r) =>
+            if (ord.lt(key, k)) loop(l, n :: path)
+            else if (ord.gt(key, k)) loop(r, n :: path)
+            else node
+        }
+
+        loop(node, Nil)
       }
 
       root = insertHelper(e, root)
@@ -157,16 +163,16 @@ object BST {
 
     // Error: Stack Overflow
     // TODO: need to make this tail recursive
-    private def insertParHelper(node: BST[T], key: T): BST[T] = node match {
-      case Empty => Node(key, Empty, Empty)
-      case Node(k, l, r) =>
-        if (ord.lt(key, k)) {
-          Node(k, insertParHelper(l, key), r)
-        } else if (ord.gt(key, k)) {
-          Node(k, l, insertParHelper(r, key))
-        } else {
-          node
-        }
+    @tailrec
+    private def insertParHelper(node: BST[T], key: T, acc: BST[T] = Empty): BST[T] = (node, acc) match {
+      case (Empty, Empty) => Node(key, Empty, Empty)
+      case (Empty, Node(k, l, r)) =>
+        if (ord.lt(key, k)) Node(k, insertParHelper(l, key, l), r)
+        else Node(k, l, insertParHelper(r, key, r))
+      case (Node(k, l, r), _) =>
+        if (ord.lt(key, k)) insertParHelper(l, key, Node(k, acc, r))
+        else if (ord.gt(key, k)) insertParHelper(r, key, Node(k, l, acc))
+        else node
     }
 
     def insertAllPar(keys: Seq[T]): Future[List[Unit]] = {
@@ -184,13 +190,14 @@ object BST {
     // Error: Stack Overflow
     // TODO: need to make this tail recursive
     private def traverseHelper(node: BST[T]): Set[T] = {
-      def traverseTailRec(node: BST[T], acc: Set[T]): Set[T] = node match {
-        case Empty => acc
-        case Node(k, l, r) =>
-          traverseTailRec(l, traverseTailRec(r, acc + k))
+      @tailrec
+      def traverseTailRec(stack: List[BST[T]], acc: Set[T]): Set[T] = stack match {
+        case Nil => acc
+        case Empty :: rest => traverseTailRec(rest, acc)
+        case Node(k, l, r) :: rest => traverseTailRec(l :: r :: rest, acc + k)
       }
 
-      traverseTailRec(node, Set())
+      traverseTailRec(List(node), Set.empty)
     }
 
     private def sortedListToBST(sortedList: List[T]): ParBST[T] = {

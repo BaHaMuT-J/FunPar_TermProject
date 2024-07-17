@@ -14,32 +14,32 @@ object TestBST extends App {
 //  val b = new BST.ParBST[Int](10)
 //  b.insertAllPar({50001 to 100000}.toList)
 
-//  val levelMap1 = a.levelTraverseSeq
-//  println(s"levelMap1 finish")
-//  val levelMap2 = a.levelTraverseThreadConcurrentMap
-//  println(s"levelMap2 finish")
+  val levelMap1 = a.levelTraverseSeq
+  println(s"levelMap1 finish")
+  val levelMap2 = a.levelTraverseThreadSync
+  println(s"levelMap2 finish")
+
+  var s = 0
+  for ((d, vec_tree) <- levelMap1) {
+    if vec_tree.toSet != (levelMap2(d).toSet) then println(s"vec_tree1 = ${vec_tree}, vec_tree2 = ${levelMap2(d)}")
+    s = s + vec_tree.size
+  }
+  println(s"s1 = $s")
+  s = 0
+  for ((d, vec_tree) <- levelMap2) {
+    s = s + vec_tree.size
+  }
+  println(s"s2 = $s")
+
+
+//  val d = a.findLevelSeq(500)
+//  println(d)
+//  val level1 = a.levelSeq(d.getOrElse(1))
+//  println(level1)
+//  val level2 = a.levelFuture(d.getOrElse(1))
+//  println(level2)
 //
-//  var s = 0
-//  for ((d, vec_tree) <- levelMap1) {
-//    if vec_tree.toSet != (levelMap2(d).toSet) then println(s"vec_tree1 = ${vec_tree}, vec_tree2 = ${levelMap2(d)}")
-//    s = s + vec_tree.size
-//  }
-//  println(s"s1 = $s")
-//  s = 0
-//  for ((d, vec_tree) <- levelMap2) {
-//    s = s + vec_tree.size
-//  }
-//  println(s"s2 = $s")
-
-
-  val d = a.findLevelSeq(500)
-  println(d)
-  val level1 = a.levelSeq(d.getOrElse(1))
-  println(level1)
-  val level2 = a.levelFuture(d.getOrElse(1))
-  println(level2)
-
-  println(level1.toSet == level2.toSet)
+//  println(level1.toSet == level2.toSet)
 
 //  println(b)
 //  println(a.combineSeq(b))

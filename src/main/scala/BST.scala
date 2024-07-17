@@ -26,6 +26,10 @@ object BST {
       this.map.put(d, vt)
     }
 
+    def getFromMap(d: Int): Vector[T] = this.synchronized {
+      this.map.getOrElse(d, Vector())
+    }
+
     def getCount: Int = this.synchronized {
       count
     }
@@ -274,6 +278,46 @@ object BST {
 
     // Level Traversing Parallel
 
+    def levelTraverseThreadSync: Map[Int, Vector[T]] = {
+      val result = new Counter[T]
+
+      def levelHelper(node: BST[T], d: Int, latch: CountDownLatch): Unit = {
+        node match {
+          case Empty => latch.countDown()
+          case Node(k, l, r) =>
+            val leftLatch = new CountDownLatch(1)
+            val rightLatch = new CountDownLatch(1)
+
+            val leftThread = ThreadBuilder {
+              levelHelper(l, d + 1, leftLatch)
+            }
+            leftThread.start()
+
+            val rightThread = ThreadBuilder {
+              levelHelper(r, d + 1, rightLatch)
+            }
+            rightThread.start()
+
+            leftLatch.await()
+            rightLatch.await()
+
+            val v = result.getFromMap(d)
+            result.pushInMap(d, v :+ k)
+
+            latch.countDown()
+        }
+      }
+
+      val rootLatch = new CountDownLatch(1)
+      val rootThread = ThreadBuilder {
+        levelHelper(root, 1, rootLatch)
+      }
+      rootThread.start()
+      rootLatch.await()
+
+      result.getMap
+    }
+
     def levelTraverseThread: Map[Int, Vector[T]] = {
       val result = new ConcurrentSkipListMap[Int, Vector[T]]()
 
@@ -341,6 +385,29 @@ object BST {
       Await.result(rootFuture, Duration.Inf)
 
       result.asScala.toMap
+    }
+
+    def levelTraverseFutureSync: Map[Int, Vector[T]] = {
+      val result = new Counter[T]
+
+      def levelHelper(node: BST[T], d: Int): Future[Unit] = node match {
+        case Empty => Future.successful(())
+        case Node(k, l, r) =>
+          val fl = levelHelper(l, d + 1)
+          val fr = levelHelper(r, d + 1)
+
+          result.pushInMap(d, result.getFromMap(d) :+ k)
+
+          for {
+            _ <- fl
+            _ <- fr
+          } yield ()
+      }
+
+      val rootFuture = levelHelper(root, 1)
+      Await.result(rootFuture, Duration.Inf)
+
+      result.getMap
     }
 
     def levelThread(depth: Int): Vector[T] = {

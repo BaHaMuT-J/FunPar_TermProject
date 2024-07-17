@@ -1,0 +1,96 @@
+[debug] > Exec(early(addDefaultCommands), None, None)
+[debug] > Exec(addDefaultCommands, None, None)
+[debug] > Exec(early(initialize), None, None)
+[debug] > Exec(initialize, None, None)
+[debug] > Exec(boot, None, None)
+[debug] > Exec(writeSbtVersion, None, None)
+[debug] > Exec(reload, None, None)
+[debug] > Exec(sbtStashOnFailure, None, None)
+[debug] > Exec(onFailure loadFailed, None, None)
+[debug] > Exec(loadp, None, None)
+[info] welcome to sbt 1.10.0 (Amazon.com Inc. Java 17.0.9)
+[debug] Load.defaultLoad until apply took 182.2147ms
+[debug]           Load.loadUnit: plugins took 155.9205ms
+[debug]           Load.loadUnit: defsScala took 0.3564ms
+[debug] [Loading] Scanning directory C:\Users\New\IdeaProjects\FunPar_TermProject\project
+[debug] [Loading] Found non-root projects 
+[debug] [Loading] Done in C:\Users\New\IdeaProjects\FunPar_TermProject\project, returning: ()
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 15.0686 ms
+[debug]               Load.resolveProject(funpar_termproject-build) took 42.2962ms
+[debug]             Load.loadTransitive: finalizeProject(Project(id funpar_termproject-build, base: C:\Users\New\IdeaProjects\FunPar_TermProject\project, plugins: List(<none>))) took 76.2624ms
+[debug] [Loading] Done in C:\Users\New\IdeaProjects\FunPar_TermProject\project, returning: (funpar_termproject-build)
+[debug]           Load.loadUnit: loadedProjectsRaw took 99.9619ms
+[debug]           Load.loadUnit: cleanEvalClasses took 0.214ms
+[debug]         Load.loadUnit(file:/C:/Users/New/IdeaProjects/FunPar_TermProject/project/, ...) took 263.3774ms
+[debug]       Load.apply: load took 410.1149ms
+[debug]       Load.apply: resolveProjects took 4.3756ms
+[debug]       Load.apply: finalTransforms took 53.5638ms
+[debug]       Load.apply: config.delegates took 10.7305ms
+[debug]       Load.apply: Def.make(settings)... took 506.4416ms
+[debug]       Load.apply: structureIndex took 121.5427ms
+[debug]       Load.apply: mkStreams took 4.668ms
+[info] loading project definition from C:\Users\New\IdeaProjects\FunPar_TermProject\project
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[debug]     Load.loadUnit: plugins took 1954.5ms
+[debug]     Load.loadUnit: defsScala took 0.0099ms
+[debug] [Loading] Scanning directory C:\Users\New\IdeaProjects\FunPar_TermProject
+[debug]       Load.loadUnit: mkEval took 3.681ms
+[debug] [Loading] Found root project root w/ remaining 
+[debug] deducing auto plugins based on known facts Set(Atom(sbt.plugins.CorePlugin)) and clauses Clauses(Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.ScriptedPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.SbtPlugin),Set(Atom(sbt.ScriptedPlugin)))
+[debug] Clause(Atom(sbt.plugins.SemanticdbPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JUnitXmlReportPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.MiniDependencyTreePlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.IvyPlugin)))
+[debug] Clause(Atom(sbt.plugins.IvyPlugin),Set(Atom(sbt.plugins.JvmPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.SemanticdbPlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.JUnitXmlReportPlugin)))
+[debug] Clause(Atom(sbt.plugins.CorePlugin),Set(Atom(sbt.plugins.Giter8TemplatePlugin)))
+[debug] Clause(Atom(sbt.plugins.JvmPlugin),Set(Atom(sbt.plugins.MiniDependencyTreePlugin))))
+[debug]   :: deduced result: Matched(sbt.plugins.CorePlugin,sbt.plugins.Giter8TemplatePlugin,sbt.plugins.IvyPlugin,sbt.plugins.JvmPlugin,sbt.plugins.MiniDependencyTreePlugin,sbt.plugins.JUnitXmlReportPlugin,sbt.plugins.SemanticdbPlugin)
+[debug] Plugins.deducer#function took 1.458 ms
+[info] loading settings for project root from build.sbt ...
+[debug]         Load.resolveProject(root) took 2.0232ms
+[debug]       Load.loadTransitive: finalizeProject(Project(id root, base: C:\Users\New\IdeaProjects\FunPar_TermProject, plugins: List(<none>))) took 4.4775ms
+[debug] [Loading] Done in C:\Users\New\IdeaProjects\FunPar_TermProject, returning: (root)
+[debug]     Load.loadUnit: loadedProjectsRaw took 2222.1089ms
+[debug]     Load.loadUnit: cleanEvalClasses took 19.7687ms
+[debug]   Load.loadUnit(file:/C:/Users/New/IdeaProjects/FunPar_TermProject/, ...) took 4199.1542ms
+[debug] Load.apply: load took 4252.013ms
+[debug] Load.apply: resolveProjects took 0.112ms
+[debug] Load.apply: finalTransforms took 11.8094ms
+[debug] Load.apply: config.delegates took 0.2989ms
+[debug] Load.apply: Def.make(settings)... took 47.0641ms
+[debug] Load.apply: structureIndex took 16.4368ms
+[debug] Load.apply: mkStreams took 0.0026ms
+[info] set current project to FunPar_TermProject (in build file:/C:/Users/New/IdeaProjects/FunPar_TermProject/)
+[debug] > Exec(sbtPopOnFailure, None, None)
+[debug] > Exec(resumeFromFailure, None, None)
+[debug] > Exec(notifyUsersAboutShell, None, None)
+[debug] > Exec(iflast shell, None, None)
+[debug] > Exec(shell, None, None)
+[info] 
+[info] Here are some highlights of sbt 1.10.0:
+[info]   - SIP-51 support for Scala 2.13 evolution
+[info]   - Various Zinc fixes
+[info]   - ConsistentAnalysisFormat: new Zinc Analysis serialization
+[info]   - CommandProgress API
+[info] See https://eed3si9n.com/sbt-1.10.0 for full release notes.
+[info] Hide the banner for this release by running `skipBanner`.
+[info] sbt server started at local:sbt-server-a1ffb3f92bfbbbf950ab
+[debug] Writing bsp connection file
+[info] started sbt server

@@ -4,9 +4,8 @@ import scala.concurrent.*
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.*
 import scala.collection.parallel.CollectionConverters.*
-import java.util.concurrent.{ConcurrentSkipListMap, CountDownLatch}
-import java.util.concurrent.atomic.AtomicInteger
-import scala.jdk.CollectionConverters.ConcurrentMapHasAsScala
+import java.util.concurrent.{ConcurrentSkipListMap, ConcurrentSkipListSet, CountDownLatch}
+import scala.jdk.CollectionConverters.*
 
 object BST {
 
@@ -194,8 +193,6 @@ object BST {
 
     // Parallel Programming
 
-    // Error: Stack Overflow
-    // TODO: need to make this tail recursive
     private def insertParHelper[K](node: BST[K], key: K)(implicit ord: Ordering[K]): BST[K] = {
       @tailrec
       def loop(curr: BST[K], path: List[BST[K]]): BST[K] = curr match {
@@ -266,10 +263,10 @@ object BST {
 
       Await.result(c, Duration.Inf)
     }
-    
+
     // Level Traversing Parallel
 
-    def levelTraverseThreadConcurrentMap: Map[Int, Vector[T]] = {
+    def levelTraverseThread: Map[Int, Vector[T]] = {
       val result = new ConcurrentSkipListMap[Int, Vector[T]]()
 
       def levelHelper(node: BST[T], d: Int, latch: CountDownLatch): Unit = {
@@ -309,7 +306,7 @@ object BST {
       result.asScala.toMap
     }
 
-    def levelTraverseFutureConcurrentMap: Map[Int, Vector[T]] = {
+    def levelTraverseFuture: Map[Int, Vector[T]] = {
       val result = new ConcurrentSkipListMap[Int, Vector[T]]()
 
       def levelHelper(node: BST[T], d: Int): Future[Unit] = node match {
@@ -337,5 +334,86 @@ object BST {
 
       result.asScala.toMap
     }
-  }
+
+    def levelThread(depth: Int): Vector[T] = {
+      val result = new ConcurrentSkipListSet[T]()
+
+      def levelHelper(node: BST[T], d: Int, latch: CountDownLatch): Unit = {
+        if d == depth then {
+          node match {
+            case Empty => latch.countDown()
+            case Node(k, l, r) =>
+              result.add(k)
+              latch.countDown()
+          }
+        } else {
+          node match {
+            case Empty => latch.countDown()
+            case Node(k, l, r) =>
+              val leftLatch = new CountDownLatch(1)
+              val rightLatch = new CountDownLatch(1)
+
+              val leftThread = ThreadBuilder {
+                levelHelper(l, d + 1, leftLatch)
+              }
+              leftThread.start()
+
+              val rightThread = ThreadBuilder {
+                levelHelper(r, d + 1, rightLatch)
+              }
+              rightThread.start()
+
+              leftLatch.await()
+              rightLatch.await()
+              latch.countDown()
+          }
+        }
+      }
+
+      val rootLatch = new CountDownLatch(1)
+      val rootThread = ThreadBuilder {
+        levelHelper(root, 1, rootLatch)
+      }
+      rootThread.start()
+      rootLatch.await()
+
+      result.asScala.toVector
+    }
+
+    def levelFuture(depth: Int): Vector[T] = {
+      val result = new ConcurrentSkipListSet[T]()
+
+      def levelHelper(node: BST[T], d: Int): Future[Unit] = {
+        if d == depth then {
+          node match {
+            case Empty => Future.successful(())
+            case Node(k, l, r) =>
+              result.add(k)
+              Future.successful(())
+          }
+        } else {
+          node match {
+            case Empty => Future.successful(())
+            case Node(_, l, r) =>
+              val fl = Future {
+                levelHelper(l, d + 1)
+              }
+              val fr = Future {
+                levelHelper(r, d + 1)
+              }
+
+              for {
+                _ <- fl
+                _ <- fr
+              } yield ()
+          }
+        }
+      }
+
+      val rootFuture = levelHelper(root, 1)
+      Await.result(rootFuture, Duration.Inf)
+
+      result.asScala.toVector
+    }
+  } // ParBST
 }

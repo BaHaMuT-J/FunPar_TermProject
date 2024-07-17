@@ -1,0 +1,41 @@
+[debug] > Exec(;set _root_.scala.collection.Seq(historyPath := None,shellPrompt := { _ => "" },SettingKey[_root_.scala.Option[_root_.sbt.File]]("sbtStructureOutputFile") in _root_.sbt.Global := _root_.scala.Some(_root_.sbt.file("C:/Users/New/AppData/Local/Temp/sbt-structure.xml")),SettingKey[_root_.java.lang.String]("sbtStructureOptions") in _root_.sbt.Global := "download, resolveSourceClassifiers, insertProjectTransitiveDependencies");apply -cp "C:/Users/New/AppData/Roaming/JetBrains/IdeaIC2024.1/plugins/Scala/repo/org/jetbrains/scala/sbt-structure-extractor_2.12_1.3/2024.1.2/sbt-structure-extractor-2024.1.2.jar" "org.jetbrains.sbt.CreateTasks" "sbt.jetbrains.LogDownloadArtifacts";preferScala2;*/*:dumpStructure, Some(0a16edf6-3962-4d96-995f-7d148e170dd1), Some(CommandSource(console0)))
+[debug] > Exec(set _root_.scala.collection.Seq(historyPath := None,shellPrompt := { _ => "" },SettingKey[_root_.scala.Option[_root_.sbt.File]]("sbtStructureOutputFile") in _root_.sbt.Global := _root_.scala.Some(_root_.sbt.file("C:/Users/New/AppData/Local/Temp/sbt-structure.xml")),SettingKey[_root_.java.lang.String]("sbtStructureOptions") in _root_.sbt.Global := "download, resolveSourceClassifiers, insertProjectTransitiveDependencies"), None, Some(CommandSource(console0)))
+[info] Defining Global / sbtStructureOptions, Global / sbtStructureOutputFile and 1 others.
+[info] The new values will be used by cleanKeepGlobs
+[info] 	Run `last` for details.
+[debug] Defining 
+[debug] 	Global / sbtStructureOptions
+[debug] 	Global / sbtStructureOutputFile
+[debug] 	history
+[debug] 	shellPrompt
+[debug] 
+[debug] The new values will be used by 
+[debug] 	cleanKeepGlobs
+[info] Reapplying settings...
+[info] set current project to FunPar_TermProject (in build file:/C:/Users/New/IdeaProjects/FunPar_TermProject/)
+[debug] > Exec(apply -cp "C:/Users/New/AppData/Roaming/JetBrains/IdeaIC2024.1/plugins/Scala/repo/org/jetbrains/scala/sbt-structure-extractor_2.12_1.3/2024.1.2/sbt-structure-extractor-2024.1.2.jar" "org.jetbrains.sbt.CreateTasks" "sbt.jetbrains.LogDownloadArtifacts", None, Some(CommandSource(console0)))
+[info] Applying State transformations org.jetbrains.sbt.CreateTasks, sbt.jetbrains.LogDownloadArtifacts from C:/Users/New/AppData/Roaming/JetBrains/IdeaIC2024.1/plugins/Scala/repo/org/jetbrains/scala/sbt-structure-extractor_2.12_1.3/2024.1.2/sbt-structure-extractor-2024.1.2.jar
+[info] Reapplying settings...
+[info] set current project to FunPar_TermProject (in build file:/C:/Users/New/IdeaProjects/FunPar_TermProject/)
+[info] Reapplying settings...
+[info] set current project to FunPar_TermProject (in build file:/C:/Users/New/IdeaProjects/FunPar_TermProject/)
+[debug] > Exec(preferScala2, None, Some(CommandSource(console0)))
+[debug] > Exec(*/*:dumpStructure, None, Some(CommandSource(console0)))
+[debug] Evaluating tasks: Global / dumpStructure
+[warn] sbt 0.13 shell syntax is deprecated; use slash syntax instead: Global / dumpStructure
+[debug] Running task... Cancel: Signal, check cycles: false, forcegc: true
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor-typed_3/2.6.20/akka-actor-typed_3-2.6.20.pom
+[info] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor-typed_3/2.6.20/akka-actor-typed_3-2.6.20.pom
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-slf4j_3/2.6.20/akka-slf4j_3-2.6.20.pom
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_3/2.6.20/akka-actor_3-2.6.20.pom
+[info] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-slf4j_3/2.6.20/akka-slf4j_3-2.6.20.pom
+[info] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_3/2.6.20/akka-actor_3-2.6.20.pom
+[info] downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-java8-compat_3/1.0.0/scala-java8-compat_3-1.0.0.pom
+[info] downloaded https://repo1.maven.org/maven2/org/scala-lang/modules/scala-java8-compat_3/1.0.0/scala-java8-compat_3-1.0.0.pom
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor-typed_3/2.6.20/akka-actor-typed_3-2.6.20.jar
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-slf4j_3/2.6.20/akka-slf4j_3-2.6.20.jar
+[info] downloading https://repo1.maven.org/maven2/org/scala-lang/modules/scala-java8-compat_3/1.0.0/scala-java8-compat_3-1.0.0.jar
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor_3/2.6.20/akka-actor_3-2.6.20.jar
+[info] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-slf4j_3/2.6.20/akka-slf4j_3-2.6.20.jar
+[info] downloaded https://repo1.maven.org/maven2/org/scala-lang/modules/scala-java8-compat_3/1.0.0/scala-java8-compat_3-1.0.0.jar
+[info] downloaded https://repo1.maven.org/maven2/com/typesafe/akka/akka-actor-typed_3/2.6.20/akka-actor-typed_3-2.6.20.jar

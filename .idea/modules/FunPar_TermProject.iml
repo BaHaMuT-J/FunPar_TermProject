@@ -12,8 +12,14 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="sbt: scala-sdk-3.4.2" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-actor-typed_3:2.8.5:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-actor_3:2.8.5:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe.akka:akka-slf4j_3:2.8.5:jar" level="project" />
+    <orderEntry type="library" name="sbt: com.typesafe:config:1.4.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-java8-compat_3:1.0.0:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang.modules:scala-parallel-collections_3:1.0.4:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala-library:2.13.12:jar" level="project" />
     <orderEntry type="library" name="sbt: org.scala-lang:scala3-library_3:3.4.2:jar" level="project" />
+    <orderEntry type="library" name="sbt: org.slf4j:slf4j-api:1.7.36:jar" level="project" />
   </component>
 </module>

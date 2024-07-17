@@ -1,0 +1,11 @@
+[debug] > Exec(println("Hello"), None, None)
+[error] Expected ID character
+[error] Not a valid command: println (similar: init)
+[error] Expected project ID
+[error] Expected configuration
+[error] Expected ':'
+[error] Expected key
+[error] Not a valid key: println (similar: printWarnings, installSbtn, terminal)
+[error] println("Hello")
+[error]        ^
+[debug] > Exec(idea-shell, None, None)

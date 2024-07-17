@@ -12,13 +12,18 @@ object BST {
   class Counter[T] {
     private var count: Int = 0
     private var set: Set[T] = Set()
+    private val map = mutable.Map[Int, Vector[T]]()
 
     def increment(): Unit = this.synchronized {
       this.count += 1
     }
 
-    def add(k: T): Unit = this.synchronized {
+    def addInSet(k: T): Unit = this.synchronized {
       this.set = this.set + k
+    }
+
+    def pushInMap(d: Int, vt: Vector[T]): Unit = this.synchronized {
+      this.map.put(d, vt)
     }
 
     def getCount: Int = this.synchronized {
@@ -28,12 +33,16 @@ object BST {
     def getSet: Set[T] = this.synchronized {
       set
     }
+
+    def getMap: Map[Int, Vector[T]] = this.synchronized {
+      map.toMap
+    }
   }
 
-  def ThreadBuilder[F](f: => F): Thread = {
+  private def ThreadBuilder[F](f: => F): Thread = {
     new Thread {
       override def run: Unit = {
-        f;
+        f
         ()
       }
     }
@@ -111,11 +120,10 @@ object BST {
 
       def combineHelper(node: BST[T]): Unit = node match {
         case Empty =>
-        case Node(k, l, r) => {
+        case Node(k, l, r) =>
           combineHelper(l)
           newTree = newTree + k
           combineHelper(r)
-        }
       }
 
       combineHelper(tree.getRoot)
@@ -380,6 +388,51 @@ object BST {
       result.asScala.toVector
     }
 
+    def levelThreadSync(depth: Int): Vector[T] = {
+      val result = new Counter[T]
+
+      def levelHelper(node: BST[T], d: Int, latch: CountDownLatch): Unit = {
+        if d == depth then {
+          node match {
+            case Empty => latch.countDown()
+            case Node(k, l, r) =>
+              result.addInSet(k)
+              latch.countDown()
+          }
+        } else {
+          node match {
+            case Empty => latch.countDown()
+            case Node(k, l, r) =>
+              val leftLatch = new CountDownLatch(1)
+              val rightLatch = new CountDownLatch(1)
+
+              val leftThread = ThreadBuilder {
+                levelHelper(l, d + 1, leftLatch)
+              }
+              leftThread.start()
+
+              val rightThread = ThreadBuilder {
+                levelHelper(r, d + 1, rightLatch)
+              }
+              rightThread.start()
+
+              leftLatch.await()
+              rightLatch.await()
+              latch.countDown()
+          }
+        }
+      }
+
+      val rootLatch = new CountDownLatch(1)
+      val rootThread = ThreadBuilder {
+        levelHelper(root, 1, rootLatch)
+      }
+      rootThread.start()
+      rootLatch.await()
+
+      result.getSet.toVector
+    }
+
     def levelFuture(depth: Int): Vector[T] = {
       val result = new ConcurrentSkipListSet[T]()
 
@@ -387,7 +440,7 @@ object BST {
         if d == depth then {
           node match {
             case Empty => Future.successful(())
-            case Node(k, l, r) =>
+            case Node(k, _, _) =>
               result.add(k)
               Future.successful(())
           }
@@ -414,6 +467,38 @@ object BST {
       Await.result(rootFuture, Duration.Inf)
 
       result.asScala.toVector
+    }
+
+    def levelFutureSync(depth: Int): Vector[T] = {
+      val result = new Counter[T]
+
+      def levelHelper(node: BST[T], d: Int): Future[Unit] = {
+        if (d == depth) {
+          node match {
+            case Empty => Future.successful(())
+            case Node(k, _, _) =>
+              result.addInSet(k)
+              Future.successful(())
+          }
+        } else {
+          node match {
+            case Empty => Future.successful(())
+            case Node(_, l, r) =>
+              val fl = levelHelper(l, d + 1)
+              val fr = levelHelper(r, d + 1)
+
+              for {
+                _ <- fl
+                _ <- fr
+              } yield ()
+          }
+        }
+      }
+
+      val rootFuture = levelHelper(root, 1)
+      Await.result(rootFuture, Duration.Inf)
+
+      result.getSet.toVector
     }
   } // ParBST
 }

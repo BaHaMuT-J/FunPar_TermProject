@@ -1,4 +1,4 @@
-object BenchMark {
+object BenchMark extends App {
 
   def timed[A](name: String)(f: => A): (Double, A) = {
     println(s"Running $name ...");
@@ -10,5 +10,7 @@ object BenchMark {
     Console.flush()
     ((stop - start) / 1e9, res)
   }
+  
+  val Tree = new BST.ParBST[Int](10)
   
 }

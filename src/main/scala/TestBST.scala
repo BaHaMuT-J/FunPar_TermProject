@@ -36,8 +36,10 @@ object TestBST extends App {
   println(d)
   val level1 = a.levelSeq(d.getOrElse(1))
   println(level1)
-  val level2 = a.levelThread(d.getOrElse(1))
+  val level2 = a.levelFuture(d.getOrElse(1))
   println(level2)
+
+  println(level1.toSet == level2.toSet)
 
 //  println(b)
 //  println(a.combineSeq(b))

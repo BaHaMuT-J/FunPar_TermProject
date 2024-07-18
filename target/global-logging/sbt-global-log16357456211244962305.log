@@ -1,0 +1,21 @@
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtStashOnFailure, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtMapExec 37 __3bdc638b-1bef-449f-a1dc-5d476b34d9de, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(bspBuildTargetCompile file:/C:/Users/New/IdeaProjects/FunPar_TermProject/#root/Compile file:/C:/Users/New/IdeaProjects/FunPar_TermProject/#root/Test, Some(__3bdc638b-1bef-449f-a1dc-5d476b34d9de), Some(CommandSource(network-1)))[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/logMessage, {"type":4,"message":"Processing buildTarget/compile"})[0m
+[0m[[0m[0mdebug[0m] [0m[0mEvaluating tasks: bspBuildTargetCompile[0m
+[0m[[0m[0mdebug[0m] [0m[0mRunning task... Cancel: Signal, check cycles: false, forcegc: true[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskStart, {"taskId":{"id":"71","parents":[]},"eventTime":1721300238541,"message":"Compiling root","dataKind":"compile-task","data":{"target":{"uri":"file:/C:/Users/New/IdeaProjects/FunPar_TermProject/#root/Compile"}}})[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/publishDiagnostics, {"textDocument":{"uri":"file:///C:/Users/New/IdeaProjects/FunPar_TermProject/src/main/scala/BST.scala"},"buildTarget":{"uri":"file:/C:/Users/New/IdeaProjects/FunPar_TermProject/#root/Compile"},"diagnostics":[{"range":{"start":{"line":234,"character":72},"end":{"line":234,"character":77}},"severity":2,"code":"29","source":"sbt","message":"\u001b[33mmatch\u001b[0m may not be exhaustive.\n\nIt would fail on pattern case: List(_, _*)\n","relatedInformation":[]},{"range":{"start":{"line":205,"character":33},"end":{"line":205,"character":47}},"severity":2,"code":"-1","source":"sbt","message":"Non local returns are no longer supported; use `boundary` and `boundary.break` in `scala.util` instead","relatedInformation":[]}],"reset":true})[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskFinish, {"taskId":{"id":"71","parents":[]},"eventTime":1721300238546,"message":"Compiled root","status":1,"dataKind":"compile-report","data":{"target":{"uri":"file:/C:/Users/New/IdeaProjects/FunPar_TermProject/#root/Compile"},"errors":0,"warnings":2,"time":5,"noOp":true}})[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskStart, {"taskId":{"id":"72","parents":[]},"eventTime":1721300238549,"message":"Compiling root-test","dataKind":"compile-task","data":{"target":{"uri":"file:/C:/Users/New/IdeaProjects/FunPar_TermProject/#root/Test"}}})[0m
+[0m[[0m[0mdebug[0m] [0m[0mjsonRpcNotify: JsonRpcNotificationMessage(2.0, build/taskFinish, {"taskId":{"id":"72","parents":[]},"eventTime":1721300238553,"message":"Compiled root-test","status":1,"dataKind":"compile-report","data":{"target":{"uri":"file:/C:/Users/New/IdeaProjects/FunPar_TermProject/#root/Test"},"errors":0,"warnings":0,"time":4}})[0m
+[0m[[0m[0mdebug[0m] [0m[0mForcing garbage collection...[0m
+[0m[[0m[32msuccess[0m] [0m[0mTotal time: 0 s, completed 18 ก.ค. 2567 17:57:18[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtCompleteExec 37, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(resumeFromFailure, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtPopOnFailure, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(sbtReportResult 37, Some(37), Some(CommandSource(network-1)))[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched Processing event for requestId Some(37): None[0m
+[0m[[0m[0mdebug[0m] [0m[0munmatched json response for requestId Some(37): {"status":"Done","channelName":"network-1","execId":"37","commandQueue":["shell"],"exitCode":0}[0m
+[0m[[0m[0mdebug[0m] [0m[0m> Exec(shell, None, None)[0m
+[0m[[0m[0mdebug[0m] [0m[0mForcing garbage collection...[0m

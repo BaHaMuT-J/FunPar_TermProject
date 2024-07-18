@@ -6,7 +6,6 @@ ThisBuild / scalaVersion := "3.4.2"
 lazy val root = (project in file("."))
   .settings(
     name := "FunPar_TermProject",
-    libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4",
-    libraryDependencies += "com.typesafe.akka" %% "akka-actor-typed" % "2.8.5"
+    libraryDependencies += "org.scala-lang.modules" %% "scala-parallel-collections" % "1.0.4"
   )
 

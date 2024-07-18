@@ -1,0 +1,13 @@
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m-- [E029] Pattern Match Exhaustivity Warning: C:\Users\New\IdeaProjects\FunPar_TermProject\src\main\scala\BST.scala:235:72 [0m[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m235 |[0m        [33mdef[0m [36mtraverseTailRec[0m([36mstack[0m: [35mList[0m[[35mBST[0m[[35mT[0m]], [36macc[0m: [35mSet[0m[[35mT[0m]): [35mSet[0m[[35mT[0m] = stack [33mmatch[0m {[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m    |[0m                                                                        ^^^^^[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m                            [33mmatch[0m may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m                            It would fail on pattern case: List(_, _*)[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0m longer explanation available when compiling with `-explain`[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m-- Warning: C:\Users\New\IdeaProjects\FunPar_TermProject\src\main\scala\BST.scala:206:33 [0m[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m206 |[0m              [33mif[0m (k.equals(key)) [33mreturn[0m Some(d) [33melse[0m newQueue.enqueue(l, r)[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m[33m    |[0m                                 ^^^^^^^^^^^^^^[0m[0m
+[0m[[0m[33mwarn[0m] [0m[0m[33m    |[0mNon local returns are no longer supported; use `boundary` and `boundary.break` in `scala.util` instead[0m
+[0m[[0m[33mwarn[0m] [0m[0mtwo warnings found[0m

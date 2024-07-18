@@ -1,4 +1,4 @@
-# Parallel Insert,Combine,and Level Traversing for BST
+# Parallel Insert, Combine, and Level Traversing for BST
 
 This Project aims to find ways to speed up the process of adding new elements to a Binary Search Tree and level traversing the tree by utilizing concepts and techniques of parallelization in scala.
 

@@ -126,7 +126,7 @@ The bold and italic number means that it is the minimum time for that number of 
 <table>
   <thead>
     <tr>
-      <th rowspan="2" style="text-align:center;">Method</th>
+      <th rowspan="2" style="text-align:center;">Combine</th>
       <th colspan="4" style="text-align:center;">Number of Input</th>
     </tr>
     <tr>
@@ -142,7 +142,7 @@ The bold and italic number means that it is the minimum time for that number of 
       <td style="text-align:center;"><i><b>2.88E-04</b></i></td>
       <td style="text-align:center;">0.0207358</td>
       <td style="text-align:center;">2.1553263</td>
-      <td style="text-align:center;">18179.80155</td>
+      <td style="text-align:center;">&gt;10 minutes</td>
     </tr>
     <tr>
       <td style="text-align:center;">Par</td>
@@ -159,7 +159,7 @@ The bold and italic number means that it is the minimum time for that number of 
 <table>
   <thead>
     <tr>
-      <th rowspan="2" style="text-align:center;">Method</th>
+      <th rowspan="2" style="text-align:center;">Level Traversing</th>
       <th colspan="4" style="text-align:center;">Number of Input</th>
     </tr>
     <tr>
@@ -213,7 +213,7 @@ The bold and italic number means that it is the minimum time for that number of 
 <table>
   <thead>
     <tr>
-      <th rowspan="2" style="text-align:center;">Method</th>
+      <th rowspan="2" style="text-align:center;">Level Finding</th>
       <th colspan="4" style="text-align:center;">Number of Input</th>
     </tr>
     <tr>
